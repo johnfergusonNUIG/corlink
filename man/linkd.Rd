@@ -27,7 +27,7 @@ linkd(
 
 \item{alg}{character; see Details}
 
-\item{missingvals}{logical Are any record pairs missing on particular fields.  If no, initial EM algorithm to impute missingness doesn't need to be run.}
+\item{missingvals}{logical Are any record pairs missing on particular fields.  If FALSE, initial EM algorithm to impute missingness doesn't need to be run.}
 }
 \value{
 A list, the first component is a matrix -  the posterior probabilities of being a true match is the last column, the second component are the fitted models used to generate the predicted probabilities
