@@ -53,7 +53,7 @@ linkd <- function(d, initial_m=NULL, initial_u=NULL, p_init=0.5, fix_p=FALSE, fi
   allterms <- c(allterms,paste("var",(L-1),"*","var",L , sep = ""))
   if(alg == "i" | alg == "a"){
   results_independence <- EM_match_independence_v2(out,m_1=initial_m,u_1=initial_u,m_2=rep(0,L),u_2=rep(0,L),p_init=p_init,tol=10^-5, fixedcol=fixed_col,fix_p=fix_p)
-  if(!missingvals) return(cbind(out,probs=results_independence$probs))
+  if(!missingvals) return(list(cbind(out,probs=results_independence$probs),p=results_independence$p, m1=results_independence$m1,u1=results_independence$u1))
   probs_independence <- reassign_probs(d[,1:(ncol(d)-1)], out, results_independence$probs)
   }
   if(alg == "b" | alg == "a"){
