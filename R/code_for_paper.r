@@ -8,7 +8,8 @@
 #' @param initial_m starting probabilities for per-field agreement in record pairs, both records being generated from the same individual.  Defaults to NULL
 #' @param initial_u starting probabilities for per-field agreement in record pairs, with the two records being generated from differing individuals  Defaults to NULL
 #' @param p_init starting probability that both records for a randomly selected record pair is associated with the same individual
-#' @param fixed_col vector indicating columns that are not to be updated in initial EM algorithm.  Useful if good prior estimates of the mis-match probabilities.  See details
+#' @param fixed_col vector indicating columns that where u probabilities are not updated in initial EM algorithm.  Useful if good prior estimates of the mis-match probabilities.  See details
+#' @param fix_p logical Is overall proportion of record pairs to be updated on each repetition?
 #' @param missingvals logical Are any record pairs missing on particular fields.  If FALSE, initial EM algorithm to impute missingness doesn't need to be run.
 #' @param alg character; see Details
 #' @keywords EM algorithm, probabilistic linkage, Feligi/Sunter, latent class, correlation
@@ -26,7 +27,7 @@
 #' output <- linkd(thedata)
 #' output$fitted_probs
 
-linkd <- function(d, initial_m=NULL, initial_u=NULL, p_init=0.5,fixed_col=NULL,alg="m",missingvals=TRUE){
+linkd <- function(d, initial_m=NULL, initial_u=NULL, p_init=0.5, fix_p=FALSE, fixed_col=NULL,alg="m",missingvals=TRUE){
   colnames(d)[ncol(d)] <- "totalcount"
   L <- ncol(d) - 1
   if(is.null(initial_m)) initial_m <- rep(0.8,L)
@@ -51,7 +52,7 @@ linkd <- function(d, initial_m=NULL, initial_u=NULL, p_init=0.5,fixed_col=NULL,a
   }
   allterms <- c(allterms,paste("var",(L-1),"*","var",L , sep = ""))
   if(alg == "i" | alg == "a"){
-  results_independence <- EM_match_independence_v2(out,m_1=initial_m,u_1=initial_u,m_2=rep(0,L),u_2=rep(0,L),p_init=p_init,tol=10^-5, fixedcol=fixed_col)
+  results_independence <- EM_match_independence_v2(out,m_1=initial_m,u_1=initial_u,m_2=rep(0,L),u_2=rep(0,L),p_init=p_init,tol=10^-5, fixedcol=fixed_col,fix_p=fix_p)
   if(!missingvals) return(cbind(out,probs=results_independence$probs))
   probs_independence <- reassign_probs(d[,1:(ncol(d)-1)], out, results_independence$probs)
   }

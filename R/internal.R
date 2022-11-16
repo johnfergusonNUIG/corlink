@@ -222,7 +222,7 @@ EM_match_modelsearch <- function(count_dframe,m_1,u_1,m_2,u_2,fixedcol=c(2:9),p_
 }
 
 
-EM_match_independence_v2 <- function(count_dframe,m_1,u_1,m_2,u_2,fixedcol=c(2:9),p_init=0.5,tol=10^-5){
+EM_match_independence_v2 <- function(count_dframe,m_1,u_1,m_2,u_2,fixedcol=c(2:9),p_init=0.5,tol=10^-5,fix_p=FALSE){
   N <- sum(count_dframe[ncol(count_dframe)])
   L <- ncol(count_dframe)-1
   colnames(count_dframe) <- c(paste("var",1:L,sep=""),"counts")
@@ -276,7 +276,7 @@ EM_match_independence_v2 <- function(count_dframe,m_1,u_1,m_2,u_2,fixedcol=c(2:9
     u1_old <-  u1_new
     m2_old <-  m2_new
     u2_old <-  u2_new
-    p_old <- p_new
+    if(!fix_p) p_old <- p_new
 
 
     for(i in 1:nrow(count_dframe)){
@@ -293,7 +293,8 @@ EM_match_independence_v2 <- function(count_dframe,m_1,u_1,m_2,u_2,fixedcol=c(2:9
 
 
     }
-    p_new <- sum(gamma_current*count_dframe$counts)/sum(count_dframe$counts)
+    if(!fix_p) p_new <- sum(gamma_current*count_dframe$counts)/sum(count_dframe$counts)
+    if(fix_p) p_new <- p_old
     for(j in 1:L){
       m1_new[j] <- sum(as.numeric(count_dframe[,j]==1)*probs_match)
       m2_new[j] <- sum(as.numeric(count_dframe[,j]==2)*probs_match)

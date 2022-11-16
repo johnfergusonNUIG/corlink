@@ -9,6 +9,7 @@ linkd(
   initial_m = NULL,
   initial_u = NULL,
   p_init = 0.5,
+  fix_p = FALSE,
   fixed_col = NULL,
   alg = "m",
   missingvals = TRUE
@@ -23,7 +24,9 @@ linkd(
 
 \item{p_init}{starting probability that both records for a randomly selected record pair is associated with the same individual}
 
-\item{fixed_col}{vector indicating columns that are not to be updated in initial EM algorithm.  Useful if good prior estimates of the mis-match probabilities.  See details}
+\item{fix_p}{logical Is overall proportion of record pairs to be updated on each repetition?}
+
+\item{fixed_col}{vector indicating columns that where u probabilities are not updated in initial EM algorithm.  Useful if good prior estimates of the mis-match probabilities.  See details}
 
 \item{alg}{character; see Details}
 
